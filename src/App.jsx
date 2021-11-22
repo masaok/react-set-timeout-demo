@@ -22,6 +22,13 @@ function App() {
           // if (seconds > (1000 / ms) * maxSeconds) {
           console.log(`ROW: ${row}`)
           console.log(`MAX ROWS: ${maxRows}`)
+
+          // let i = 0
+          // ;(function timeout2() {
+          //   setCol(col + 1)
+
+          //   setTimeout(timeout2, 1000)
+          // })()
         }
       }, ms)
     } else if (!isActive) {
