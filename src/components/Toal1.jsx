@@ -14,6 +14,8 @@ const useStyles = makeStyles(
 const Toal1 = props => {
   const classes = useStyles(props)
 
+  // Using refs from this tutorial:
+  // https://upmostly.com/tutorials/settimeout-in-react-components-using-hooks
   const [seconds, setSeconds] = useState(0)
   const secondsRef = useRef(seconds)
   secondsRef.current = seconds
@@ -26,46 +28,35 @@ const Toal1 = props => {
   const colRef = useRef(col)
   colRef.current = col
 
-  const [maxRow] = useState(5)
-  const [maxCol] = useState(5)
+  const [maxRow] = useState(2)
+  const [maxCol] = useState(2)
 
   useEffect(() => {
     // const timer = setTimeout(() => {
     //   console.log('This will run after 1 second!')
     // }, 1000)
 
-    // https://upmostly.com/tutorials/settimeout-in-react-components-using-hooks
+    // TODO: Make this stop at exactly row 2 and col 2
     const timer = () => {
-      console.log('LOG THIS EVERY SECOND: ' + seconds)
+      console.log('LOG THIS EVERY SECOND: ' + secondsRef.current)
+      if (rowRef.current > maxRow) {
+        return () => clearTimeout(timer)
+      } else {
+        setSeconds(secondsRef.current + 1)
+        setCol(colRef.current + 1)
 
-      setSeconds(secondsRef.current + 1)
-      setCol(colRef.current + 1)
-
-      if (colRef.current > 5) {
-        setRow(rowRef.current + 1)
-        setCol(0)
+        if (colRef.current > maxCol) {
+          setRow(rowRef.current + 1)
+          setCol(0)
+        }
       }
 
       setTimeout(timer, 1000)
     }
     timer()
 
-    // DOES NOT WORK (because it only runs once)
-    // const timer = setTimeout(() => {
-    //   console.log('LOG THIS EVERY SECOND: ' + seconds)
-
-    //   let temp = seconds + 1
-
-    //   // setSeconds(seconds + 1)
-    //   setSeconds(temp)
-
-    //   if (col < 5) {
-    //     setCol(col + 1)
-    //   }
-    // }, 1000)
-
     return () => clearTimeout(timer)
-  }, [])
+  }, [maxCol, maxRow])
 
   return (
     <div className={classes.root}>
