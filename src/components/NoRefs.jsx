@@ -54,7 +54,7 @@ const Toal1 = props => {
     timer()
 
     return () => clearTimeout(timer)
-  }, [maxCol, maxRow])
+  }, [maxCol, maxRow, seconds])
 
   return (
     <div className={classes.root}>
