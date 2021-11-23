@@ -12,7 +12,8 @@ function App() {
           <Routes>
             {/* <Route path="/toal1" element={<Toal1 />} /> */}
             {/* <Route path="//*" element={<Toal1 />} /> */}
-            <Route path="toal1" element={<Toal1 />} />
+            {/* <Route path="toal1" element={<Toal1 />} /> */}
+            <Route path="//*" element={<Toal1 />} />
           </Routes>
         </Router>
       </header>

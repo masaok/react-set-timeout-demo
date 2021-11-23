@@ -40,7 +40,7 @@ const Toal1 = props => {
     const timer = () => {
       console.log('LOG THIS EVERY SECOND: ' + secondsRef.current)
       if (rowRef.current > maxRow) {
-        return () => clearTimeout(timer)
+        return clearTimeout(timer) // return necessary to stop the timer
       } else {
         setSeconds(secondsRef.current + 1)
         setCol(colRef.current + 1)
