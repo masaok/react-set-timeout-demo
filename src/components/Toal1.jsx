@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { makeStyles } from '@mui/styles'
 
 const useStyles = makeStyles(
@@ -14,49 +14,36 @@ const useStyles = makeStyles(
 const Toal1 = props => {
   const classes = useStyles(props)
 
-  // Using refs from this tutorial:
-  // https://upmostly.com/tutorials/settimeout-in-react-components-using-hooks
   const [seconds, setSeconds] = useState(0)
-  const secondsRef = useRef(seconds)
-  secondsRef.current = seconds
-
   const [row, setRow] = useState(0)
-  const rowRef = useRef(row)
-  rowRef.current = row
-
   const [col, setCol] = useState(0)
-  const colRef = useRef(col)
-  colRef.current = col
 
   const [maxRow] = useState(2)
   const [maxCol] = useState(2)
 
-  useEffect(() => {
-    // const timer = setTimeout(() => {
-    //   console.log('This will run after 1 second!')
-    // }, 1000)
-
-    // TODO: Make this stop at exactly row 2 and col 2
-    const timer = () => {
-      console.log('LOG THIS EVERY SECOND: ' + secondsRef.current)
-      if (rowRef.current > maxRow) {
-        return clearTimeout(timer) // return necessary to stop the timer
-      } else {
-        setSeconds(secondsRef.current + 1)
-        setCol(colRef.current + 1)
-
-        if (colRef.current > maxCol) {
-          setRow(rowRef.current + 1)
-          setCol(0)
-        }
-      }
-
-      setTimeout(timer, 1000)
+  const timer = useCallback(() => {
+    console.log('LOG THIS EVERY SECOND: ' + seconds)
+    if (col < maxCol) {
+      setCol(col + 1)
+      setSeconds(seconds + 1)
+    } else if (row < maxRow) {
+      setRow(row + 1)
+      setCol(0)
+      setSeconds(seconds + 1)
     }
-    timer()
 
-    return () => clearTimeout(timer)
-  }, [maxCol, maxRow])
+    // If neither condition is true, the state doesn't change, which doesn't
+    // recreate the timer, which doesn't trigger the useEffect. The loop
+    // will stop.
+  }, [maxCol, maxRow, seconds, row, col])
+
+  useEffect(() => {
+    const timeout = setTimeout(timer, 1000)
+
+    // Make sure to clear the current timeout whenever a new timer is generated.
+    // This ensures that only one timeout is active at a time.
+    return () => clearTimeout(timeout)
+  }, [timer])
 
   return (
     <div className={classes.root}>
